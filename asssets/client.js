@@ -125,3 +125,10 @@ export function onGameoverCallback(onGameover) {
 export function registerOnPlayingCallback(onPlaying) {
   onPlayingCallback = onPlaying;
 }
+
+export function restartWebSocket() {
+  if (socket) {
+    socket.close();
+  }
+  initWebSocket();
+}

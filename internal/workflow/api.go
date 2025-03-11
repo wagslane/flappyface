@@ -275,6 +275,8 @@ func (h *Hub) handleMessage(client *Client, rawMessage []byte) error {
 			}
 			log.Printf("Game is over\n")
 			h.broadcast <- jsonDie
+			h.db.Players = map[uuid.UUID]database.Player{}
+			h.db.Gamestate = database.GameStateInit
 		}
 
 	default:
