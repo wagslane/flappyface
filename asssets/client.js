@@ -4,6 +4,7 @@ let onCountdownCallback = null;
 let onPlayerDieCallback = null;
 let onConnectedCallback = null;
 let onPlayingCallback = null;
+let globalPlayerId = null;
 
 // Initialize WebSocket connection
 function initWebSocket() {
@@ -50,6 +51,7 @@ function handleMessage(message) {
       break;
     case "connect":
       if (onConnectedCallback) {
+        globalPlayerId = message.playerID;
         onConnectedCallback(message.playerID);
       }
       break;
@@ -94,12 +96,12 @@ function sendMessage(msgType, data = {}) {
 initWebSocket();
 
 // Public functions
-export function jump(playerID) {
-  sendMessage("jump", { playerID });
+export function jump() {
+  sendMessage("jump", { playerID: globalPlayerId });
 }
 
-export function die(playerID) {
-  sendMessage("die", { playerID });
+export function die() {
+  sendMessage("die", { playerID: globalPlayerId });
 }
 
 export function registerOnPlayerJump(onJump) {
