@@ -9,7 +9,7 @@
   max-block-size: 25px;
 
   will-change: transform;
-  translate: 20px var(--player-y, 0);
+  translate: 20px var(--player-y, 40vh);
 }
 
 .bird {

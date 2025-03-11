@@ -77,7 +77,7 @@ let lastVideoTime = -1;
 let results = undefined;
 
 async function predictWebcam() {
-  // await faceLandmarker.setOptions({ runningMode: runningMode });
+
   let startTimeMs = performance.now();
 
   if (lastVideoTime !== video.currentTime) {

@@ -23,11 +23,14 @@
 
   <section id="start">
     <h1>Flappy Face</h1>
-    <p>To play:</p>
-    <button id="startbtn">Connect your camera</button>
-    <div id="webcamConnected" style="opacity: 0">Connected</div>
-    <p id="waiting" style="opacity: 0">Waiting for the game to start!</p>
+    <div>
+      <p id="playinstructions">To play:</p>
+      <button id="startbtn">Connect your camera</button>
+      <p id="waiting" style="opacity: 0">Game starts in <span id="waitingtime">10</span>s</p>
+    </div>
   </section>
+
+  <div id="webcamConnected" style="opacity: 0"></div>
 
   <dialog id="gameoverui">
     <section>

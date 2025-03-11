@@ -6,10 +6,6 @@ let game = {
   scoretimeout: null,
 }
 
-// setTimeout(() => {
-//   startGame()
-// }, 1000)
-
 function startGame() {
   start.style.display = 'none'
   
@@ -46,6 +42,7 @@ export function poolState() {
   console.log('poolState')
   // start.style.display = 'none'
   waiting.style.opacity = 1
+  playinstructions.style.display = 'none'
 
   // listen for game to start
   document.addEventListener('keydown', function (event) {

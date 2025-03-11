@@ -17,3 +17,15 @@
     translate: var(--game-level-end) 0;
   }
 }
+
+
+#webcamConnected {
+  position: fixed;
+  top: 0;
+  right: 0;
+  margin: 10px;
+  width: 15px;
+  height: 15px;
+  background: red;
+  border-radius: 1e3px;
+}

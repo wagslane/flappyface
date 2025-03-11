@@ -10,5 +10,25 @@
   h1 {
     font-size: 14vw;
     font-weight: 100;
+
+    transition: opacity .5s ease, scale 1.5s var(--ease-spring-5);
+
+    @starting-style {
+      opacity: 0;
+      scale: 0;
+    }
+  }
+
+  > div {
+    display: grid;
+    place-items: center;
+    gap: 10px;
+
+    transition: opacity .5s ease 1s, scale 1.5s var(--ease-spring-5) 1s;
+    
+      @starting-style {
+        opacity: 0;
+        scale: 0;
+      }
   }
 }
