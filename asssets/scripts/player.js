@@ -31,7 +31,7 @@ export function playerDie(player) {
 export function playerJump(player) {
   const sprite = player || player1
 
-  if (sprite.dead || sprite.jumping) return
+  if (sprite.dead) return
 
   jump()
   sprite.jumping = true

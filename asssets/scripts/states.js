@@ -22,9 +22,9 @@ registerOnCountdownCallback((count) => {
   waitingtime.innerText = count;
 });
 
-registerOnPlayerJump((playerID) => {
-  playerJump(playerID);
-});
+// registerOnPlayerJump((playerID) => {
+//   playerJump(playerID);
+// });
 
 registerOnPlayerDie((playerID) => {
   console.log("die:", playerID);
@@ -117,8 +117,8 @@ function collisionDetection() {
       startFall();
       player1.dead = true
       playerDie()
-      return die()
-      // return gameOver();
+      // return die()
+      return gameOver();
     }
   }
 }
