@@ -5,12 +5,9 @@ export function registerOnPlayerJump(onJump) {
   // call onJump whenever an event is received
 }
 
-// onStateChange(stateEnum)
+// onStateChange(stateEnum, countdownNumber?)
 // - init (waiting for first connection)
-// - countdown29 (first player connected, countdown start)
-// - countdown28 (one second after...)
-// ...
-// - countdown0
+// - countdown (first player connected, countdown start)
 // - playing
 // - gameover
 export function registerOnStateChange(onStateChange) {}
