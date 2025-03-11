@@ -1,17 +1,28 @@
 import { createLevel } from './level.js'
 import { startFall, listenForJump } from './player.js'
+import { registerOnConnected } from '../client.js'
+import { jump } from './player.js'
 
 let game = {
   score: 0,
   scoretimeout: null,
 }
 
+// function randomJump() {
+//   setTimeout(() => {
+//     jump(player2)
+//     randomJump()
+//   }, Math.random() * 500 + 150)
+// }
+
 function startGame() {
   start.style.display = 'none'
   
   createLevel()
   startScoring()
-  startFall()
+  startFall(player1)
+  // startFall(player2)
+  // randomJump()
   listenForJump()
   gameLoop()
 }
@@ -39,6 +50,9 @@ export function playGame() {
 }
 
 export function poolState() {
+  registerOnConnected((playerID) => {
+    console.log('Player connected:', playerID)
+  })
   console.log('poolState')
   // start.style.display = 'none'
   waiting.style.opacity = 1

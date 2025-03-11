@@ -4,12 +4,16 @@
   }
 }
 
-#player1 {
+.player {
   width: 50px;
   max-block-size: 25px;
 
   will-change: transform;
   translate: 20px var(--player-y, 40vh);
+
+  &:not(#player1) {
+    scale: .8;
+  }
 }
 
 .bird {

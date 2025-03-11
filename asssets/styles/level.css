@@ -2,7 +2,7 @@
   position: fixed;
   inset: 0;
 
-  animation: scene 50s ease-in forwards;
+  animation: scene 40s var(--ease-in-4) forwards;
 
   >* {
     position: absolute;
@@ -22,7 +22,7 @@
 #webcamConnected {
   position: fixed;
   top: 0;
-  right: 0;
+  left: 0;
   margin: 10px;
   width: 15px;
   height: 15px;

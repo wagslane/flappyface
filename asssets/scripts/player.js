@@ -10,35 +10,32 @@ export function listenForJump() {
   })
 }
 
-export function startFall() {
-  fall()
+export function startFall(player) {
+  // todo iterate and apply
+  const sprite = player || player1
+  fall(sprite)
 }
 
-function fall() {
-  player1.style.transition = 'translate 1s ease-in'
-  player1.style.setProperty('--player-y', '100dvh')
+function fall(sprite) {
+  sprite.style.transition = 'translate 1s ease-in'
+  sprite.style.setProperty('--player-y', '100dvh')
 }
 
-function stopFall() {
-  const [, translateY] = window.getComputedStyle(player1).translate.split(' ')
-  const curY = parseInt(translateY)
-  player1.style.transition = null
-  player1.style.setProperty('--player-y', curY + 'px')
-}
+export function jump(player) {
+  const sprite = player || player1
 
-export function jump() {
-  if (player1.dead || player1.jumping) return
+  if (sprite.dead || sprite.jumping) return
 
-  player1.jumping = true
+  sprite.jumping = true
 
-  const [, translateY] = window.getComputedStyle(player1).translate.split(' ')
+  const [, translateY] = window.getComputedStyle(sprite).translate.split(' ')
   const curY = parseInt(translateY)
 
-  player1.style.transition = 'translate .2s ease'
-  player1.style.setProperty('--player-y', curY - jumpAmount + 'px')
+  sprite.style.transition = 'translate .2s ease'
+  sprite.style.setProperty('--player-y', curY - jumpAmount + 'px')
 
-  player1.addEventListener('transitionend', event => {
-    player1.jumping = false
-    fall()
+  sprite.addEventListener('transitionend', event => {
+    sprite.jumping = false
+    fall(sprite)
   }, { once: true })
 }
