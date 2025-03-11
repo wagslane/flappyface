@@ -23,6 +23,11 @@ function fall(sprite) {
   sprite.style.setProperty('--player-y', '100dvh')
 }
 
+export function playerDie(player) {
+  const sprite = player || player1
+  sprite.dead = true
+}
+
 export function playerJump(player) {
   const sprite = player || player1
 

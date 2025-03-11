@@ -53,7 +53,7 @@ function handleMessage(message) {
     case "connect":
       if (onConnectedCallback) {
         if (!globalPlayerId) {
-          globalPlayerId = message.playerID;
+          return globalPlayerId = message.playerID;
         }
         onConnectedCallback(message.playerID);
       }

@@ -1,5 +1,5 @@
 import { createLevel } from "./level.js";
-import { startFall, listenForJump } from "./player.js";
+import { startFall, listenForJump, playerDie, createPlayer } from "./player.js";
 import {
   registerOnConnected,
   registerOnCountdownCallback,
@@ -14,6 +14,8 @@ import { playerJump } from "./player.js";
 
 registerOnConnected((playerID) => {
   console.log("Player connected:", playerID);
+
+  createPlayer(playerID)
 });
 
 registerOnCountdownCallback((count) => {
@@ -21,28 +23,23 @@ registerOnCountdownCallback((count) => {
 });
 
 registerOnPlayerJump((playerID) => {
-  console.log("jump:", playerID);
+  playerJump(playerID);
 });
 
 registerOnPlayerDie((playerID) => {
   console.log("die:", playerID);
+  playerDie(window[playerID]);
 });
 
 registerOnGameoverCallback(() => {
   console.log("game over:");
+  stopFall();
 });
 
 let game = {
   score: 0,
   scoretimeout: null,
 };
-
-// function randomJump() {
-//   setTimeout(() => {
-//     jump(player2)
-//     randomJump()
-//   }, Math.random() * 500 + 150)
-// }
 
 function startGame() {
   start.style.display = "none";
@@ -119,7 +116,7 @@ function collisionDetection() {
     ) {
       startFall();
       player1.dead = true
-      die()
+      return die()
       // return gameOver();
     }
   }
