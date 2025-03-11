@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 	"sync"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
@@ -82,6 +84,13 @@ func (h *Hub) Run() {
 		case message := <-h.broadcast:
 			h.mutex.Lock()
 			for client := range h.clients {
+				msgString := string(message)
+				if strings.Contains(msgString, "jump") && strings.Contains(msgString, client.id.String()) {
+					continue
+				}
+				if strings.Contains(msgString, "die") && strings.Contains(msgString, client.id.String()) {
+					continue
+				}
 				err := client.conn.WriteMessage(websocket.TextMessage, message)
 				if err != nil {
 					log.Printf("Error broadcasting to client %s: %v", client.id, err)
@@ -115,9 +124,48 @@ func (h *Hub) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 	// Register the client
 	h.register <- client
 
-	db, err := ActivityPlayerConnect(context.Background(), client.id, *h.db)
+	h.onConnect(playerID)
+
+	// Start reading messages from this client
+	go h.handleMessages(client)
+}
+
+func (h *Hub) sendCountdown(count int) {
+	countdownMessage := Message{
+		Type:      "countdown",
+		Countdown: count,
+	}
+	countdownJSON, err := json.Marshal(countdownMessage)
 	if err != nil {
-		log.Printf("Error connecting player %s: %v", client.id, err)
+		log.Printf("Error marshaling countdown message: %v", err)
+		return
+	}
+	h.broadcast <- countdownJSON
+
+}
+
+func (h *Hub) onConnect(playerID uuid.UUID) {
+	if len(h.db.Players) == 0 {
+		go func() {
+			for i := 29; i > 0; i-- {
+				h.sendCountdown(i)
+				time.Sleep(time.Second)
+			}
+			playingMsg := Message{
+				Type: "playing",
+			}
+			playingJSON, err := json.Marshal(playingMsg)
+			if err != nil {
+				log.Printf("Error marshaling playing message: %v", err)
+				return
+			}
+			h.broadcast <- playingJSON
+		}()
+	}
+
+	db, err := ActivityPlayerConnect(context.Background(), playerID, *h.db)
+	if err != nil {
+		log.Printf("Error connecting player %s: %v", playerID, err)
 		return
 	}
 	h.UpdateDB(db)
@@ -126,7 +174,7 @@ func (h *Hub) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("Welcome, %s!\n", playerID)
 	connectMsg := Message{
 		Type:     "connect",
-		PlayerID: client.id,
+		PlayerID: playerID,
 	}
 
 	connectJSON, err := json.Marshal(connectMsg)
@@ -135,11 +183,8 @@ func (h *Hub) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Printf("Player %s connected", client.id)
+	log.Printf("Player %s connected", playerID)
 	h.broadcast <- connectJSON
-
-	// Start reading messages from this client
-	go h.handleMessages(client)
 }
 
 // Handle incoming WebSocket messages
@@ -226,7 +271,7 @@ func (h *Hub) handleMessage(client *Client, rawMessage []byte) error {
 			if err != nil {
 				return fmt.Errorf("Error unmarshalling: %v", err)
 			}
-			log.Printf("Game is over", client.id)
+			log.Printf("Game is over\n")
 			h.broadcast <- jsonDie
 		}
 
