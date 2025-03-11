@@ -211,8 +211,24 @@ func (h *Hub) handleMessage(client *Client, rawMessage []byte) error {
 		log.Printf("Player %s died", client.id)
 		h.broadcast <- jsonDie
 
-		// Check if game should end
-		// h.checkGameEnd()
+		done := true
+		for _, player := range h.db.Players {
+			if player.Alive {
+				done = false
+			}
+		}
+		if done {
+			h.db.Gamestate = database.GameStateGameover
+			gameoverMsg := Message{
+				Type: "gameover",
+			}
+			jsonDie, err = json.Marshal(gameoverMsg)
+			if err != nil {
+				return fmt.Errorf("Error unmarshalling: %v", err)
+			}
+			log.Printf("Game is over", client.id)
+			h.broadcast <- jsonDie
+		}
 
 	default:
 		log.Printf("Unknown message type from client %s: %s", client.id, message.Type)

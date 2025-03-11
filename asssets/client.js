@@ -62,7 +62,7 @@ function handleMessage(message) {
         onPlayerConnectCallback(message.players);
       }
       break;
-    case "playerDie":
+    case "die":
       if (onPlayerDieCallback) {
         onPlayerDieCallback(message.playerID);
       }
