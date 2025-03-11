@@ -1,5 +1,5 @@
 import * as vision from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision";
-import { jump } from "./player.js"
+import { playerJump } from "./player.js"
 import { poolState } from "./states.js"
 
 const { FaceLandmarker, FilesetResolver } = vision;
@@ -103,7 +103,7 @@ function drawBlendShapes(el, blendShapes) {
 
   if (jawOpen.score > .5) {
     console.log('jump')
-    return jump()
+    return playerJump()
   }
 
   const kissy = blendShapes[0].categories.filter((shape) => {
@@ -112,7 +112,7 @@ function drawBlendShapes(el, blendShapes) {
 
   if (kissy.score > .5) {
     console.log('kiss')
-    return jump()
+    return playerJump()
   }
 
   const browInnerUp = blendShapes[0].categories.filter((shape) => {
@@ -121,6 +121,6 @@ function drawBlendShapes(el, blendShapes) {
 
   if (browInnerUp.score > .5) {
     console.log('brow')
-    return jump()
+    return playerJump()
   }
 }

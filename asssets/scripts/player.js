@@ -1,12 +1,14 @@
+import { jump } from "../client.js";
+
 const jumpAmount = 100
 
 export function listenForJump() {
   document.addEventListener('click', function (event) {
-    jump()
+    playerJump()
   })
 
   document.addEventListener('keydown', function (event) {
-    if (event.key === ' ') jump()
+    if (event.key === ' ') playerJump()
   })
 }
 
@@ -21,11 +23,12 @@ function fall(sprite) {
   sprite.style.setProperty('--player-y', '100dvh')
 }
 
-export function jump(player) {
+export function playerJump(player) {
   const sprite = player || player1
 
   if (sprite.dead || sprite.jumping) return
 
+  jump()
   sprite.jumping = true
 
   const [, translateY] = window.getComputedStyle(sprite).translate.split(' ')
@@ -38,4 +41,28 @@ export function jump(player) {
     sprite.jumping = false
     fall(sprite)
   }, { once: true })
+}
+
+export function createPlayer(playerID) {
+  const player2Div = document.createElement('div');
+  player2Div.id = 'player2';
+  player2Div.className = 'player';
+
+  const birdDiv = document.createElement('div');
+  birdDiv.className = 'bird';
+
+  const leftWingDiv = document.createElement('div');
+  leftWingDiv.className = 'left-wing';
+
+  const rightWingDiv = document.createElement('div');
+  rightWingDiv.className = 'right-wing';
+
+  birdDiv.appendChild(leftWingDiv);
+  birdDiv.appendChild(rightWingDiv);
+
+  player2Div.appendChild(birdDiv);
+
+  document.body.appendChild(player2Div);
+
+  return player2Div;
 }

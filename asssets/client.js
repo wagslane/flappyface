@@ -4,6 +4,7 @@ let onCountdownCallback = null;
 let onPlayerDieCallback = null;
 let onConnectedCallback = null;
 let onPlayingCallback = null;
+let onGameoverCallback = null;
 let globalPlayerId = null;
 
 // Initialize WebSocket connection
@@ -120,7 +121,7 @@ export function registerOnCountdownCallback(onCountdown) {
   onCountdownCallback = onCountdown;
 }
 
-export function onGameoverCallback(onGameover) {
+export function registerOnGameoverCallback(onGameover) {
   onGameoverCallback = onGameover;
 }
 

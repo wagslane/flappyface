@@ -4,16 +4,32 @@ import {
   registerOnConnected,
   registerOnCountdownCallback,
   registerOnPlayingCallback,
+  registerOnGameoverCallback,
+  registerOnPlayerDie,
+  registerOnPlayerJump,
+  die,
 } from "../client.js";
-import { jump } from "./player.js";
+
+import { playerJump } from "./player.js";
 
 registerOnConnected((playerID) => {
   console.log("Player connected:", playerID);
 });
 
 registerOnCountdownCallback((count) => {
-  console.log("Countdown:", count);
   waitingtime.innerText = count;
+});
+
+registerOnPlayerJump((playerID) => {
+  console.log("jump:", playerID);
+});
+
+registerOnPlayerDie((playerID) => {
+  console.log("die:", playerID);
+});
+
+registerOnGameoverCallback(() => {
+  console.log("game over:");
 });
 
 let game = {
@@ -102,7 +118,9 @@ function collisionDetection() {
       bird.bottom > box.top
     ) {
       startFall();
-      return gameOver();
+      player1.dead = true
+      die()
+      // return gameOver();
     }
   }
 }
