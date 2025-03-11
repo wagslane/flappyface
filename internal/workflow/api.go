@@ -219,6 +219,7 @@ type Message struct {
 	State     string    `json:"state,omitempty"`
 	Players   []string  `json:"players,omitempty"`
 	Countdown int       `json:"countdown,omitempty"`
+	You       bool      `json:"you,omitempty"`
 }
 
 func (h *Hub) handleMessage(client *Client, rawMessage []byte) error {
