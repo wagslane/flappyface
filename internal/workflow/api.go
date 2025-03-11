@@ -175,8 +175,13 @@ func (h *Hub) onConnect(playerID uuid.UUID) {
 	// Send a welcome message
 	fmt.Printf("Welcome, %s!\n", playerID)
 	connectMsg := Message{
-		Type:     "connect",
-		PlayerID: playerID,
+		Type:         "connect",
+		PlayerID:     playerID,
+		AllPlayerIDs: []string{},
+	}
+
+	for id := range h.db.Players {
+		connectMsg.AllPlayerIDs = append(connectMsg.AllPlayerIDs, id.String())
 	}
 
 	connectJSON, err := json.Marshal(connectMsg)
@@ -214,12 +219,13 @@ func (h *Hub) handleMessages(client *Client) {
 }
 
 type Message struct {
-	Type      string    `json:"type"`
-	PlayerID  uuid.UUID `json:"playerID"`
-	State     string    `json:"state,omitempty"`
-	Players   []string  `json:"players,omitempty"`
-	Countdown int       `json:"countdown,omitempty"`
-	You       bool      `json:"you,omitempty"`
+	Type         string    `json:"type"`
+	PlayerID     uuid.UUID `json:"playerID"`
+	State        string    `json:"state,omitempty"`
+	Players      []string  `json:"players,omitempty"`
+	Countdown    int       `json:"countdown,omitempty"`
+	You          bool      `json:"you,omitempty"`
+	AllPlayerIDs []string  `json:"allPlayerIDs,omitempty"`
 }
 
 func (h *Hub) handleMessage(client *Client, rawMessage []byte) error {
