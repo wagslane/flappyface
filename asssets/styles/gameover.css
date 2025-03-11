@@ -1,0 +1,30 @@
+#gameoverui {
+  >section {
+    display: grid;
+    place-items: center;
+    gap: 10px;
+    padding: 20px;
+  }
+
+  & button {
+    border: 3px solid black;
+    background: black;
+    color: white;
+    font-weight: bold;
+    height: 3lh;
+    padding-inline: 2ch;
+
+    &:active {
+      background: white;
+      color: black;
+    }
+
+    &:focus-visible {
+      outline-offset: 5px;
+    }
+  }
+
+  &::backdrop {
+    background: #000c;
+  }
+}

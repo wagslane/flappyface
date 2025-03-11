@@ -1,0 +1,19 @@
+#level {
+  position: fixed;
+  inset: 0;
+
+  animation: scene 50s ease-in forwards;
+
+  >* {
+    position: absolute;
+    display: block;
+    inline-size: 200px;
+    background: black;
+  }
+}
+
+@keyframes scene {
+  to {
+    translate: var(--game-level-end) 0;
+  }
+}

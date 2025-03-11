@@ -1,0 +1,27 @@
+@import "styles/player.css";
+@import "styles/level.css";
+@import "styles/gameover.css";
+@import "styles/score.css";
+@import "styles/start.css";
+
+@layer support {
+  * {
+    box-sizing: border-box;
+
+    &:not(dialog, [popover]) {
+      margin: 0;
+    }
+  }
+
+  html,
+  body {
+    block-size: 100dvh;
+    inline-size: 100dvw;
+    overflow: hidden;
+    font-family: system-ui, sans-serif;
+  }
+
+  body {
+    perspective: 200px;
+  }
+}

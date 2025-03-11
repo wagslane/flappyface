@@ -1,0 +1,10 @@
+#score {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  font-variant-numeric: tabular-nums;
+  font-size: 36px;
+  font-weight: 900;
+  line-height: 1cap;
+  background: white;
+}

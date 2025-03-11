@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flappy Face</title>
+  <link rel="stylesheet" type="text/css" href="./index.css">
+</head>
+
+<body>
+  <div id="player1">
+    <div class="bird">
+      <div class="left-wing"></div>
+      <div class="right-wing"></div>
+    </div>
+  </div>
+  <div id="level"></div>
+  <div id="score"></div>
+
+  <video id="webcam" style="display: none" autoplay playsinline></video>
+  <canvas id="output_canvas" style="display: none"></canvas>
+
+  <section id="start">
+    <h1>Flappy Face</h1>
+    <p>To play:</p>
+    <button id="startbtn">Connect your camera</button>
+    <div id="webcamConnected" style="opacity: 0">Connected</div>
+    <p id="waiting" style="opacity: 0">Waiting for the game to start!</p>
+  </section>
+
+  <dialog id="gameoverui">
+    <section>
+      <h1>GAME OVER</h1>
+      <button id="resetbtn">Try Again</button>
+    </section>
+  </dialog>
+
+  <script type="module" src="./index.js"></script>
+</body>
+
+</html>

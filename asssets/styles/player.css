@@ -1,0 +1,47 @@
+@keyframes flap {
+  50% {
+    transform: rotateX(calc(var(--flip, 1) * 100deg));
+  }
+}
+
+#player1 {
+  width: 50px;
+  max-block-size: 25px;
+
+  will-change: transform;
+  translate: 20px var(--player-y, 0);
+}
+
+.bird {
+  inline-size: 50px;
+  max-block-size: 25px;
+  aspect-ratio: 1;
+  background: black;
+
+  display: grid;
+
+  transform-style: preserve-3d;
+  transform: rotateY(165deg);
+
+  > * {
+    height: 100px;
+    grid-area: 1/1;
+    transform-style: preserve-3d;
+    transform-origin: top;
+    animation: flap .5s ease infinite;
+  }
+
+  & > .left-wing {
+    --c: cyan;
+    --flip: 1;
+    background: conic-gradient(from 350deg at 50% 100%,
+        var(--c) 0%, var(--c) 8% 8%, #0000 0% 0%);
+  }
+
+  & > .right-wing {
+    --c: yellow;
+    --flip: -1;
+    background: conic-gradient(from 350deg at 50% 100%,
+        var(--c) 0%, var(--c) 8% 8%, #0000 0% 0%);
+  }
+}

@@ -1,0 +1,14 @@
+#start {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  gap: 50px;
+  place-items: center;
+  place-content: center;
+  z-index: 1;
+
+  h1 {
+    font-size: 14vw;
+    font-weight: 100;
+  }
+}
