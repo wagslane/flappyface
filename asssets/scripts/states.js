@@ -33,7 +33,7 @@ registerOnPlayerDie((playerID) => {
 
 registerOnGameoverCallback(() => {
   console.log("game over:");
-  stopFall();
+  gameOver()
 });
 
 let game = {
@@ -116,6 +116,7 @@ function collisionDetection() {
     ) {
       startFall();
       player1.dead = true
+      playerDie()
       return die()
       // return gameOver();
     }
