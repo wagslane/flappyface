@@ -1,8 +1,8 @@
 package database
 
-type Database struct {
-	gamestate GameState
-}
+import (
+	"github.com/google/uuid"
+)
 
 type GameState string
 
@@ -12,3 +12,13 @@ const (
 	GameStatePlaying  = "playing"
 	GameStateGameover = "gameover"
 )
+
+type Database struct {
+	Gamestate GameState
+	Players   map[uuid.UUID]Player
+}
+
+type Player struct {
+	ID    uuid.UUID
+	Alive bool
+}

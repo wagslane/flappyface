@@ -3,11 +3,10 @@ package main
 import (
 	"log"
 
+	"github.com/wagslane/flappyface/internal/workflow"
 	"go.temporal.io/sdk/client"
 	"go.temporal.io/sdk/worker"
 )
-
-const taskQueueName = "flappyface-task-queue"
 
 func main() {
 	c, err := client.Dial(client.Options{})
@@ -16,13 +15,11 @@ func main() {
 	}
 	defer c.Close()
 
-	w := worker.New(c, taskQueueName, worker.Options{})
+	w := worker.New(c, workflow.TaskQueueName, worker.Options{})
 
 	// This worker hosts both Workflow and Activity functions.
-	w.RegisterWorkflow(app.MoneyTransfer)
-	w.RegisterActivity(app.Withdraw)
-	w.RegisterActivity(app.Deposit)
-	w.RegisterActivity(app.Refund)
+	w.RegisterWorkflow(workflow.FlappyFaceWorkflow)
+	w.RegisterActivity(workflow.ActivityPlayerConnect)
 
 	// Start listening to the Task Queue.
 	err = w.Run(worker.InterruptCh())
@@ -30,5 +27,3 @@ func main() {
 		log.Fatalln("unable to start Worker", err)
 	}
 }
-
-// @@@SNIPEND
