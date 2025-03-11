@@ -135,6 +135,7 @@ func (h *Hub) sendCountdown(count int) {
 		Type:      "countdown",
 		Countdown: count,
 	}
+	fmt.Println("sending countdown", count)
 	countdownJSON, err := json.Marshal(countdownMessage)
 	if err != nil {
 		log.Printf("Error marshaling countdown message: %v", err)
