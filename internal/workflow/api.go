@@ -155,6 +155,7 @@ func (h *Hub) onConnect(playerID uuid.UUID) {
 			playingMsg := Message{
 				Type: "playing",
 			}
+			fmt.Println("PLAYING")
 			playingJSON, err := json.Marshal(playingMsg)
 			if err != nil {
 				log.Printf("Error marshaling playing message: %v", err)

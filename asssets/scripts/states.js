@@ -1,12 +1,25 @@
-import { createLevel } from './level.js'
-import { startFall, listenForJump } from './player.js'
-import { registerOnConnected } from '../client.js'
-import { jump } from './player.js'
+import { createLevel } from "./level.js";
+import { startFall, listenForJump } from "./player.js";
+import {
+  registerOnConnected,
+  registerOnCountdownCallback,
+  registerOnPlayingCallback,
+} from "../client.js";
+import { jump } from "./player.js";
+
+registerOnConnected((playerID) => {
+  console.log("Player connected:", playerID);
+});
+
+registerOnCountdownCallback((count) => {
+  console.log("Countdown:", count);
+  waitingtime.innerText = count;
+});
 
 let game = {
   score: 0,
   scoretimeout: null,
-}
+};
 
 // function randomJump() {
 //   setTimeout(() => {
@@ -16,75 +29,67 @@ let game = {
 // }
 
 function startGame() {
-  start.style.display = 'none'
-  
-  createLevel()
-  startScoring()
-  startFall(player1)
+  start.style.display = "none";
+
+  createLevel();
+  startScoring();
+  startFall(player1);
   // startFall(player2)
   // randomJump()
-  listenForJump()
-  gameLoop()
+  listenForJump();
+  gameLoop();
 }
 
 export function resetGame() {
-  player1.dead = false
-  player1.style.setProperty('--player-y', 0)
+  player1.dead = false;
+  player1.style.setProperty("--player-y", 0);
 
-  level.style.animationPlayState = null
+  level.style.animationPlayState = null;
   level.getAnimations().forEach((anim) => {
-    anim.currentTime = 0
-  })
+    anim.currentTime = 0;
+  });
 
-  clearInterval(game.scoretimeout)
+  clearInterval(game.scoretimeout);
 
-  gameoverui.close()
+  gameoverui.close();
 
   setTimeout(() => {
-    startGame()
-  }, 1500)
+    startGame();
+  }, 1500);
 }
 
 export function playGame() {
-  startGame()
+  startGame();
 }
 
 export function poolState() {
-  registerOnConnected((playerID) => {
-    console.log('Player connected:', playerID)
-  })
-  console.log('poolState')
+  console.log("poolState");
   // start.style.display = 'none'
-  waiting.style.opacity = 1
-  playinstructions.style.display = 'none'
+  waiting.style.opacity = 1;
+  playinstructions.style.display = "none";
 
-  // listen for game to start
-  document.addEventListener('keydown', function (event) {
-    if (event.key === 'Enter') {
-      startGame()
-    }
-  })
+  registerOnPlayingCallback(() => {
+    startGame();
+  });
 }
 
 function startScoring() {
-  game.score = 0
+  game.score = 0;
 
   game.scoretimeout = setInterval(() => {
     if (!player1.dead) {
-      game.score += 10
-      score.textContent = game.score
+      game.score += 10;
+      score.textContent = game.score;
     }
-  }, 100)
+  }, 100);
 }
 
 function collisionDetection() {
-  const bird = player1.getBoundingClientRect()
+  const bird = player1.getBoundingClientRect();
 
-  if (bird.bottom > window.innerHeight)
-    return gameOver()
+  if (bird.bottom > window.innerHeight) return gameOver();
 
-  if (bird.bottom < 0)
-    return gameOver()
+  if (bird.bottom < 0) return gameOver();
 
   // todo: dont go through every child
   for (let i = 0; i < level.children.length; i++) {
@@ -96,26 +101,29 @@ function collisionDetection() {
       bird.top < box.bottom &&
       bird.bottom > box.top
     ) {
-      startFall()
-      return gameOver()
+      startFall();
+      return gameOver();
     }
   }
 }
 
 function gameOver() {
-  player1.dead = true
-  level.style.animationPlayState = 'paused'
-  gameoverui.showModal()
+  player1.dead = true;
+  level.style.animationPlayState = "paused";
+  gameoverui.showModal();
 
-  resetbtn.addEventListener('click', event => {
-    resetGame()
-  }, { once: true })
+  resetbtn.addEventListener(
+    "click",
+    (event) => {
+      resetGame();
+    },
+    { once: true },
+  );
 }
 
 function gameLoop() {
-  if (player1.dead) return
+  if (player1.dead) return;
 
-  collisionDetection()
-  requestAnimationFrame(gameLoop)
+  collisionDetection();
+  requestAnimationFrame(gameLoop);
 }
-

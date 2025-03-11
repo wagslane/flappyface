@@ -3,6 +3,7 @@ let onJumpCallback = null;
 let onCountdownCallback = null;
 let onPlayerDieCallback = null;
 let onConnectedCallback = null;
+let onPlayingCallback = null;
 
 // Initialize WebSocket connection
 function initWebSocket() {
@@ -40,6 +41,7 @@ function initWebSocket() {
 
 // Handle incoming messages
 function handleMessage(message) {
+  console.log("MESSAGE:", message);
   switch (message.type) {
     case "jump":
       if (onJumpCallback) {
@@ -63,7 +65,12 @@ function handleMessage(message) {
       break;
     case "countdown":
       if (onCountdownCallback) {
-        onCountdownCallback(message.count);
+        onCountdownCallback(message.countdown);
+      }
+      break;
+    case "playing":
+      if (onPlayingCallback) {
+        onPlayingCallback();
       }
       break;
   }
@@ -107,10 +114,14 @@ export function registerOnConnected(onConnected) {
   onConnectedCallback = onConnected;
 }
 
-export function onCountdownCallback(onCountdown) {
+export function registerOnCountdownCallback(onCountdown) {
   onCountdownCallback = onCountdown;
 }
 
 export function onGameoverCallback(onGameover) {
   onGameoverCallback = onGameover;
+}
+
+export function registerOnPlayingCallback(onPlaying) {
+  onPlayingCallback = onPlaying;
 }
