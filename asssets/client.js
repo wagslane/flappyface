@@ -1,7 +1,6 @@
 let socket = null;
 let onJumpCallback = null;
-let onStateChangeCallback = null;
-let onPlayerConnectCallback = null;
+let onCountdownCallback = null;
 let onPlayerDieCallback = null;
 let onConnectedCallback = null;
 
@@ -52,19 +51,19 @@ function handleMessage(message) {
         onConnectedCallback(message.playerID);
       }
       break;
-    case "state":
-      if (onStateChangeCallback) {
-        onStateChangeCallback(message.state, message.countdown);
-      }
-      break;
-    case "players":
-      if (onPlayerConnectCallback) {
-        onPlayerConnectCallback(message.players);
-      }
-      break;
-    case "playerDie":
+    case "die":
       if (onPlayerDieCallback) {
         onPlayerDieCallback(message.playerID);
+      }
+      break;
+    case "gameover":
+      if (onGameoverCallback) {
+        onGameoverCallback();
+      }
+      break;
+    case "countdown":
+      if (onCountdownCallback) {
+        onCountdownCallback(message.count);
       }
       break;
   }
@@ -100,18 +99,18 @@ export function registerOnPlayerJump(onJump) {
   onJumpCallback = onJump;
 }
 
-export function registerOnStateChange(onStateChange) {
-  onStateChangeCallback = onStateChange;
-}
-
-export function registerOnPlayerConnect(onPlayerConnect) {
-  onPlayerConnectCallback = onPlayerConnect;
-}
-
 export function registerOnPlayerDie(onPlayerDie) {
   onPlayerDieCallback = onPlayerDie;
 }
 
 export function registerOnConnected(onConnected) {
   onConnectedCallback = onConnected;
+}
+
+export function onCountdownCallback(onCountdown) {
+  onCountdownCallback = onCountdown;
+}
+
+export function onGameoverCallback(onGameover) {
+  onGameoverCallback = onGameover;
 }
