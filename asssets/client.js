@@ -52,7 +52,9 @@ function handleMessage(message) {
       break;
     case "connect":
       if (onConnectedCallback) {
-        globalPlayerId = message.playerID;
+        if (!globalPlayerId) {
+          globalPlayerId = message.playerID;
+        }
         onConnectedCallback(message.playerID);
       }
       break;
@@ -133,5 +135,6 @@ export function restartWebSocket() {
   if (socket) {
     socket.close();
   }
+  globalPlayerId = null;
   initWebSocket();
 }
