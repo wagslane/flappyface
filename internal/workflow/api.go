@@ -255,6 +255,12 @@ func (h *Hub) handleMessage(client *Client, rawMessage []byte) error {
 			return fmt.Errorf("Error unmarshalling: %v", err)
 		}
 
+		cpy, ok := h.db.Players[client.id]
+		if ok {
+			cpy.Alive = false
+		}
+		h.db.Players[client.id] = cpy
+
 		log.Printf("Player %s died", client.id)
 		h.broadcast <- jsonDie
 
