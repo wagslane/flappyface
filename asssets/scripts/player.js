@@ -32,7 +32,7 @@ export function playerJump(player) {
 
   if (sprite.dead) return
 
-  jump()
+  if (!player) jump()
   sprite.jumping = true
 
   const [, translateY] = window.getComputedStyle(sprite).translate.split(' ')

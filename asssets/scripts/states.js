@@ -12,11 +12,16 @@ import {
 
 import { playerJump } from "./player.js";
 
-const players = {player1}
+const players = {}
 
-registerOnConnected((playerID) => {
+registerOnConnected((playerID, allPlayerIDs) => {
   console.log("Player connected:", playerID);
-  players[playerID] = createPlayer(playerID)
+  
+  allPlayerIDs.forEach((id) => {
+    if (!players[id]) {
+      players[id] = createPlayer(id)
+    }
+  })
 });
 
 registerOnCountdownCallback((count) => {
