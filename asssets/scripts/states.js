@@ -12,16 +12,17 @@ import {
 
 import { playerJump } from "./player.js";
 
-const players = {}
+const players = {};
 
 registerOnConnected((playerID, allPlayerIDs) => {
   console.log("Player connected:", playerID);
-  
+  console.log("All players:", allPlayerIDs);
+
   allPlayerIDs.forEach((id) => {
     if (!players[id]) {
-      players[id] = createPlayer(id)
+      players[id] = createPlayer(id);
     }
-  })
+  });
 });
 
 registerOnCountdownCallback((count) => {
@@ -39,7 +40,7 @@ registerOnPlayerDie((playerID) => {
 
 registerOnGameoverCallback(() => {
   console.log("game over:");
-  gameOver()
+  gameOver();
 });
 
 let game = {
@@ -55,7 +56,7 @@ function startGame() {
   for (const player of Object.values(players)) {
     startFall(player);
   }
-  
+
   listenForJump();
   gameLoop();
 }
@@ -122,8 +123,8 @@ function collisionDetection() {
       bird.bottom > box.top
     ) {
       startFall();
-      player1.dead = true
-      playerDie()
+      player1.dead = true;
+      playerDie();
       // return die()
       return gameOver();
     }

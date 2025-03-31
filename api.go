@@ -34,10 +34,10 @@ type Client struct {
 
 // ChatHub manages WebSocket connections
 type Hub struct {
-	clients    map[*Client]bool
+	clients    map[uuid.UUID]Client
 	broadcast  chan []byte
-	register   chan *Client
-	unregister chan *Client
+	register   chan Client
+	unregister chan uuid.UUID
 	mutex      sync.Mutex
 	db         *database.Database
 }
@@ -51,10 +51,10 @@ func (h *Hub) UpdateDB(db database.Database) {
 // NewHub creates a new ChatHub
 func NewHub() *Hub {
 	return &Hub{
-		clients:    make(map[*Client]bool),
+		clients:    make(map[uuid.UUID]Client),
 		broadcast:  make(chan []byte),
-		register:   make(chan *Client),
-		unregister: make(chan *Client),
+		register:   make(chan Client),
+		unregister: make(chan uuid.UUID),
 		db: &database.Database{
 			Players:   make(map[uuid.UUID]database.Player),
 			Gamestate: database.GameStateInit,
@@ -68,22 +68,22 @@ func (h *Hub) Run() {
 		select {
 		case client := <-h.register:
 			h.mutex.Lock()
-			h.clients[client] = true
+			h.clients[client.id] = client
 			h.mutex.Unlock()
 			log.Printf("Client %s connected. Total clients: %d", client.id, len(h.clients))
 
-		case client := <-h.unregister:
+		case playerID := <-h.unregister:
+			log.Printf("Client disconnected: %s", playerID)
 			h.mutex.Lock()
-			if _, ok := h.clients[client]; ok {
-				delete(h.clients, client)
+			delete(h.clients, playerID)
+			if client, ok := h.clients[playerID]; ok {
 				client.conn.Close()
-				log.Printf("Client %s disconnected. Total clients: %d", client.id, len(h.clients))
 			}
+			delete(h.db.Players, playerID)
 			h.mutex.Unlock()
-
 		case message := <-h.broadcast:
 			h.mutex.Lock()
-			for client := range h.clients {
+			for playerID, client := range h.clients {
 				msgString := string(message)
 				if strings.Contains(msgString, "jump") && strings.Contains(msgString, client.id.String()) {
 					continue
@@ -95,7 +95,7 @@ func (h *Hub) Run() {
 				if err != nil {
 					log.Printf("Error broadcasting to client %s: %v", client.id, err)
 					client.conn.Close()
-					delete(h.clients, client)
+					delete(h.clients, playerID)
 				}
 			}
 			h.mutex.Unlock()
@@ -116,7 +116,7 @@ func (h *Hub) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Create a new client
-	client := &Client{
+	client := Client{
 		conn: conn,
 		id:   playerID,
 	}
@@ -127,7 +127,7 @@ func (h *Hub) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 	h.onConnect(playerID)
 
 	// Start reading messages from this client
-	go h.handleMessages(client)
+	go h.handleMessages(&client)
 }
 
 func (h *Hub) sendCountdown(count int) {
@@ -183,6 +183,7 @@ func (h *Hub) onConnect(playerID uuid.UUID) {
 	for id := range h.db.Players {
 		connectMsg.AllPlayerIDs = append(connectMsg.AllPlayerIDs, id.String())
 	}
+	fmt.Println(connectMsg.AllPlayerIDs)
 
 	connectJSON, err := json.Marshal(connectMsg)
 	if err != nil {
@@ -197,7 +198,7 @@ func (h *Hub) onConnect(playerID uuid.UUID) {
 // Handle incoming WebSocket messages
 func (h *Hub) handleMessages(client *Client) {
 	defer func() {
-		h.unregister <- client
+		h.unregister <- client.id
 	}()
 
 	for {
