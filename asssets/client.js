@@ -52,9 +52,6 @@ function handleMessage(message) {
       break;
     case "connect":
       if (onConnectedCallback) {
-        if (!globalPlayerId) {
-          return (globalPlayerId = message.playerID);
-        }
         onConnectedCallback(message.playerID, message.allPlayerIDs);
       }
       break;
