@@ -47,10 +47,11 @@ export function playerJump(player) {
   }, { once: true })
 }
 
-export function createPlayer(playerID) {
-  const player2Div = document.createElement('div');
-  player2Div.id = 'player2';
-  player2Div.className = 'player';
+export function createPlayer(playerID, isLocal) {
+  const player = document.createElement('div');
+  player.id = playerID;
+  player.className = 'player';
+  player.setAttribute('local-player', isLocal)
 
   const birdDiv = document.createElement('div');
   birdDiv.className = 'bird';
@@ -64,9 +65,9 @@ export function createPlayer(playerID) {
   birdDiv.appendChild(leftWingDiv);
   birdDiv.appendChild(rightWingDiv);
 
-  player2Div.appendChild(birdDiv);
+  player.appendChild(birdDiv);
 
-  document.body.appendChild(player2Div);
+  document.body.appendChild(player);
 
-  return player2Div;
+  return player;
 }

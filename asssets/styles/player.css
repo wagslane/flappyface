@@ -13,7 +13,7 @@
   translate: 20px var(--player-y, 40vh);
   z-index: 2;
 
-  &:not(#player1) {
+  &[local-player="false"] {
     scale: .5;
     z-index: 1;
     filter: grayscale(.6);

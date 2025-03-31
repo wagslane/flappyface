@@ -8,6 +8,7 @@ import {
   registerOnPlayerDie,
   registerOnPlayerJump,
   die,
+  getGlobalPlayerId,
 } from "../client.js";
 
 import { playerJump } from "./player.js";
@@ -17,10 +18,11 @@ const players = {};
 registerOnConnected((playerID, allPlayerIDs) => {
   console.log("Player connected:", playerID);
   console.log("All players:", allPlayerIDs);
-
+  let myID = getGlobalPlayerId()
+  
   allPlayerIDs.forEach((id) => {
     if (!players[id]) {
-      players[id] = createPlayer(id);
+      players[id] = createPlayer(id, id == myID);
     }
   });
 });
