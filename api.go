@@ -325,6 +325,6 @@ func startApi(h *Hub) {
 	router.PathPrefix("/").Handler(fs)
 
 	// Start the server
-	log.Println("Server starting on :1337")
+	log.Println("Server starting on http://localhost:1337")
 	log.Fatal(http.ListenAndServe(":1337", router))
 }
