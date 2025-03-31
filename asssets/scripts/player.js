@@ -13,7 +13,6 @@ export function listenForJump() {
 }
 
 export function startFall(player) {
-  // todo iterate and apply
   const sprite = player || player1
   fall(sprite)
 }

@@ -12,23 +12,24 @@ import {
 
 import { playerJump } from "./player.js";
 
+const players = {player1}
+
 registerOnConnected((playerID) => {
   console.log("Player connected:", playerID);
-
-  createPlayer(playerID)
+  players[playerID] = createPlayer(playerID)
 });
 
 registerOnCountdownCallback((count) => {
   waitingtime.innerText = count;
 });
 
-// registerOnPlayerJump((playerID) => {
-//   playerJump(playerID);
-// });
+registerOnPlayerJump((playerID) => {
+  playerJump(players[playerID]);
+});
 
 registerOnPlayerDie((playerID) => {
   console.log("die:", playerID);
-  playerDie(window[playerID]);
+  playerDie(players[playerID]);
 });
 
 registerOnGameoverCallback(() => {
@@ -46,9 +47,10 @@ function startGame() {
 
   createLevel();
   startScoring();
-  startFall(player1);
-  // startFall(player2)
-  // randomJump()
+  for (const player of Object.values(players)) {
+    startFall(player);
+  }
+  
   listenForJump();
   gameLoop();
 }
