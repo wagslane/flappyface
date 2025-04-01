@@ -41,10 +41,6 @@ function initWebSocket() {
   });
 }
 
-export function getGlobalPlayerId() {
-  return globalPlayerId;
-}
-
 // Handle incoming messages
 function handleMessage(message) {
   console.log("MESSAGE:", message);

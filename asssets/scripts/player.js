@@ -49,7 +49,7 @@ export function playerJump(player) {
 
 export function createPlayer(playerID, isLocal) {
   const player = document.createElement('div');
-  player.id = playerID;
+  player.id = isLocal ? 'player1' : playerID;
   player.className = 'player';
   player.setAttribute('local-player', isLocal)
 
